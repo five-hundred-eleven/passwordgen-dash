@@ -22,7 +22,7 @@ meta_tags = [
 ]
 
 FLASK_APP = Flask(__name__)
-APP = Dash(server=FLASK_APP, meta_tags=meta_tags, external_stylesheets=external_stylesheets)
+APP = Dash(__name__, server=FLASK_APP, meta_tags=meta_tags, external_stylesheets=external_stylesheets)
 
 layout = html.Div([
     dbc.Row([
