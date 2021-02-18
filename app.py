@@ -78,6 +78,7 @@ current_generated_password = ""
     [
         Output("generated-password", "children"),
         Output("length-indicator", "children"),
+        Output("confirm-password", "value"),
     ],
     [
         Input("password-length", "value"),
@@ -98,26 +99,33 @@ def updateGeneratedPassword(num_letters):
         Select length with the slider: {num_letters}
     """
     current_generated_password = generatePassword(int(num_letters))
-    return [
+    return (
         dcc.Markdown(current_generated_password),
         dcc.Markdown(indicator_text),
-    ]
+        "",
+    )
 
 @APP.callback(
     Output("confirm-password-indicator", "children"),
     [
         Input("confirm-password", "value"),
+        Input("password-length", "value"),
     ]
 )
-def confirmPassword(entered_password):
+def confirmPassword(entered_password, *args):
     """
         User practices entering the password.
     """
 
     global current_generated_password
 
+    print(f"generated password: {current_generated_password}")
+    print(f"entered password:   {entered_password}")
+
     if entered_password == current_generated_password:
         return dcc.Markdown("Correct!", style={"color": "green"})
+    elif entered_password == "":
+        return dcc.Markdown("try typing the password!")
     else:
         return dcc.Markdown("Wrong!", style={"color": "red"})
 
