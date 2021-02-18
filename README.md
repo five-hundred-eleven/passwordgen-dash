@@ -5,7 +5,7 @@ It is on a Heroku free dyn, so it might take a moment to load.
 
 Security was not taken into consideration in this app so I do not advise using
 http://password.stromsy.com for sensitive purposes. If you like it, clone it
-and run the server on a local machine.
+and run the server on a trusted local machine.
 
 The goal is to generate randomized, easy to type and easy to read passwords.
 
