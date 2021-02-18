@@ -40,7 +40,7 @@ layout = html.Div([
                     Generate an easy-to-type and readable random password.
 
                     Security was not taken into consideration in this app so I do not advise using
-                    https://password.stromsy.com for sensitive purposes. If you like it, clone it
+                    http://password.stromsy.com for sensitive purposes. If you like it, clone it
                     and run the server on a local machine. See [the source](https://github.com/ekoly/passwordgen-dash).
 
                     Practice entering the password in the input box below the generated password.
