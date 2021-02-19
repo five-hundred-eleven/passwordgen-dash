@@ -1,13 +1,13 @@
-from flask import Flask, render_template, request
+from flask import Flask
 from dash import Dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 
-from PasswordGeneration import generatePassword 
+from password_generation import generatePassword 
 
-DEFAULT_PASSWORD_LENGTH = 18
+DEFAULT_PASSWORD_LENGTH = 15
 
 
 external_stylesheets = [
@@ -41,21 +41,19 @@ layout = html.Div([
 
                     Security was not taken into consideration in this app so I
                     do not advise using it for sensitive purposes. If you like
-                    it, clone it and run the server on a local machine. See
+                    it, clone it and run the server on a trusted local machine. See
                     [the source](https://github.com/ekoly/passwordgen-dash).
-
-                    Practice entering the password in the input box below the generated password.
-                    
                 """),
                 html.Div([], id="length-indicator"),
-                dcc.RangeSlider(
+                dcc.Slider(
                     id="password-length",
                     min=5,
                     max=80,
                     step=1,
-                    value=[DEFAULT_PASSWORD_LENGTH,],
+                    value=DEFAULT_PASSWORD_LENGTH,
                 ),
-                html.Div([], id="generated-password", style={"font-family": "monospace"},),
+                html.Button("Generate Another", id="generate-another", style={"margin-bottom": "15px"}),
+                html.Div([], id="generated-password", style={"font-family": "monospace", "margin-left": "3px"},),
                 dcc.Input(id="confirm-password", style={"width": "100%", "font-family": "monospace"}),
                 html.Div([], id="confirm-password-indicator"),
                 dcc.Markdown("""
@@ -85,9 +83,6 @@ layout = html.Div([
 
 APP.layout = layout
 
-
-current_generated_password = ""
-
 @APP.callback(
     [
         Output("generated-password", "children"),
@@ -96,25 +91,21 @@ current_generated_password = ""
     ],
     [
         Input("password-length", "value"),
+        Input("generate-another", "n_clicks"),
     ],
 )
-def updateGeneratedPassword(num_letters):
+def updateGeneratedPassword(num_letters, *args):
     """
         Update the generated password.
     """
-
-    global current_generated_password
-
-    num_letters, = num_letters
-
-    print(f"Number of letters selected: {num_letters}")
+    #print(f"Number of letters selected: {num_letters}")
 
     indicator_text = f"""
         Select length with the slider: {num_letters}
     """
     current_generated_password = generatePassword(int(num_letters))
     return (
-        dcc.Markdown(current_generated_password),
+        current_generated_password,
         dcc.Markdown(indicator_text),
         "",
     )
@@ -123,20 +114,18 @@ def updateGeneratedPassword(num_letters):
     Output("confirm-password-indicator", "children"),
     [
         Input("confirm-password", "value"),
-        Input("password-length", "value"),
+        Input("generated-password", "children"),
     ]
 )
-def confirmPassword(entered_password, *args):
+def confirmPassword(entered_password, generated_password):
     """
         User practices entering the password.
     """
 
-    global current_generated_password
+    #print(f"generated password: {generated_password}")
+    #print(f"entered password:   {entered_password}")
 
-    print(f"generated password: {current_generated_password}")
-    print(f"entered password:   {entered_password}")
-
-    if entered_password == current_generated_password:
+    if entered_password == generated_password:
         return dcc.Markdown("Correct!", style={"color": "green"})
     elif entered_password == "":
         return dcc.Markdown("try typing the password!")
