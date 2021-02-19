@@ -54,7 +54,12 @@ layout = html.Div([
                 ),
                 html.Button("Generate Another", id="generate-another", style={"margin-bottom": "15px"}),
                 html.Div([], id="generated-password", style={"font-family": "monospace", "margin-left": "3px"},),
-                dcc.Input(id="confirm-password", style={"width": "100%", "font-family": "monospace"}),
+                dcc.Input(
+                    id="confirm-password",
+                    style={"width": "100%", "font-family": "monospace"},
+                    spellCheck=False,
+                    autoComplete="off",
+                ),
                 html.Div([], id="confirm-password-indicator"),
                 dcc.Markdown("""
                     "Easy to type" means:
