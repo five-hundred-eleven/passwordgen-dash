@@ -39,9 +39,10 @@ layout = html.Div([
 
                     Generate an easy-to-type and readable random password.
 
-                    Security was not taken into consideration in this app so I do not advise using
-                    http://password.stromsy.com for sensitive purposes. If you like it, clone it
-                    and run the server on a local machine. See [the source](https://github.com/ekoly/passwordgen-dash).
+                    Security was not taken into consideration in this app so I
+                    do not advise using it for sensitive purposes. If you like
+                    it, clone it and run the server on a local machine. See
+                    [the source](https://github.com/ekoly/passwordgen-dash).
 
                     Practice entering the password in the input box below the generated password.
                     
@@ -54,9 +55,19 @@ layout = html.Div([
                     step=1,
                     value=[DEFAULT_PASSWORD_LENGTH,],
                 ),
-                html.Div([], id="generated-password"),
-                dcc.Input(id="confirm-password", style={"width": "100%"}),
+                html.Div([], id="generated-password", style={"font-family": "monospace"},),
+                dcc.Input(id="confirm-password", style={"width": "100%", "font-family": "monospace"}),
                 html.Div([], id="confirm-password-indicator"),
+                dcc.Markdown("""
+                    "Easy to type" means:
+                    * Alternating between keys typed by the left hand and right hand
+                    * Avoiding keys that require moving the hands too far away from the home row
+                    * If the previous letter required the Shift key, the next letter will not use
+                    the pinky finger (and vice versa)
+
+                    "Easy to read" simply means avoiding letters that are easily mistaken for other
+                    letters, such as 1/l, 0/O, etc.
+                """),
             ],
             sm=12,
             md=6,
