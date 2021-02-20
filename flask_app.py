@@ -19,3 +19,11 @@ def static_css(filename):
     """
     path = os.path.join(os.getcwd(), "css")
     return send_from_directory(path, filename)
+
+@FLASK_APP.route("/img/<filename>")
+def static_img(filename):
+    """
+        Serves image files.
+    """
+    path = os.path.join(os.getcwd(), "img")
+    return send_from_directory(path, filename)

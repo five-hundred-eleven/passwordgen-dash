@@ -5,15 +5,15 @@ import random
 left_keys =         "qwertasdfgzxcv2345"
 left_shift_keys =   "QWERTASDFGZXCV!@#$%"
 
-right_keys =        "yuip[]hjk;'bnm,./6789-="
-right_shift_keys =  'YUP{}HJKL:"BNM<>?&*()_+'
+right_keys =        "yuip[hjk;'bnm,./789-="
+right_shift_keys =  'YUP{HJKL:"BNM<>?&*()_+'
 
 all_keys = left_keys + left_shift_keys + right_keys + right_shift_keys
 all_left_keys = left_keys + left_keys + left_shift_keys
 all_right_keys = right_keys + right_keys + right_shift_keys
 
 left_pinky_keys = set(right_shift_keys + "5tgvqaz!")
-right_pinky_keys = set(left_shift_keys + "67yuhbn&YUHBN-=p[];'/_+P{}:\"<>?")
+right_pinky_keys = set(left_shift_keys + "7yuhbn&YUHBN-=p[];'/_+P{}:\"<>?")
 all_pinky_keys = left_pinky_keys | right_pinky_keys
 
 left_keys_no_pinky = "".join(set(all_left_keys) - all_pinky_keys)

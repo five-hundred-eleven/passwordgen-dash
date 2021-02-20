@@ -1,0 +1,56 @@
+body {
+    overflow-x: hidden;
+}
+
+a {
+    color: #115;
+}
+
+#background-image {
+    background-image: url("/img/vikings_at_straumsey_background-1.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+}
+
+#content {
+    z-index: 999;
+}
+
+#generate-another {
+    margin-bottom: 15px;
+}
+
+#generated-password {
+    font-family: monospace;
+    margin-left: 3px;
+}
+
+#confirm-password {
+    width: 100%;
+    font-family: monospace;
+}
+
+#confirm-password-indicator {
+    min-height: 35px;
+}
+
+.disclaimer {
+    color: #511;
+}
+
+input.affirm {
+    border: 3px solid lawngreen;
+    border-radius: 3px;
+    margin: -3px;
+}
+
+input.scold {
+    border: 3px solid red;
+    border-radius: 3px;
+    margin: -3px;
+}
