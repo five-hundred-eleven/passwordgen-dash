@@ -5,8 +5,8 @@ import random
 left_keys =         "qwertasdfgzxcv2345"
 left_shift_keys =   "QWERTASDFGZXCV!@#$%"
 
-right_keys =        "yuip[hjk;'bnm,./789-="
-right_shift_keys =  'YUP{HJKL:"BNM<>?&*()_+'
+right_keys =        "yuip[hjk;'bnm,./789-"
+right_shift_keys =  'YUP{HJKL:"BNM<>?&*()_'
 
 all_keys = left_keys + left_shift_keys + right_keys + right_shift_keys
 all_left_keys = left_keys + left_keys + left_shift_keys

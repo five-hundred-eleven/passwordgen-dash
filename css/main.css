@@ -43,14 +43,18 @@ a {
     color: #511;
 }
 
+input {
+    margin: 2px;
+}
+
 input.affirm {
-    border: 3px solid lawngreen;
-    border-radius: 3px;
-    margin: -3px;
+    border: 4px solid lawngreen;
+    border-radius: 4px;
+    margin: 0;
 }
 
 input.scold {
-    border: 3px solid red;
-    border-radius: 3px;
-    margin: -3px;
+    border: 4px solid red;
+    border-radius: 4px;
+    margin: 0;
 }
