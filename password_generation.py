@@ -11,7 +11,7 @@ try:
 except:
     import os
     os.system("python -m spacy download en_core_web_sm")
-    spacy.load("en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm")
 
 left_keys =         "qwertasdfgzxcv2345"
 left_shift_keys =   "QWERTASDFGZXCV!@#$%"
