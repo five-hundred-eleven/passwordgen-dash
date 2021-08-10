@@ -5,6 +5,7 @@ import random
 import re
 import requests
 import spacy
+import time
 
 try:
     nlp = spacy.load("en_core_web_sm")
@@ -12,6 +13,10 @@ except:
     import os
     os.system("python -m spacy download en_core_web_sm")
     nlp = spacy.load("en_core_web_sm")
+
+LOAD_WIKI_THRESHOLD = 15.0
+random_article_text = ""
+last_wiki_access = 0.0
 
 left_keys =         "qwertasdfgzxcv2345"
 left_shift_keys =   "QWERTASDFGZXCV!@#$%"
@@ -70,45 +75,60 @@ def simple_tokenize(doc):
 
 def generatePassphrase(num_words):
 
-    #print(f"generating a passphrase with {num_words} words")
+    global random_article_text, last_wiki_access
+
+    current_wiki_access = time.time()
 
     # will loop if we get a very short article
     while True:
 
-        print("Getting a wikipedia article...")
-        random_article_res = requests.get("https://en.wikipedia.org/wiki/Special:Random")
+        if current_wiki_access - last_wiki_access > LOAD_WIKI_THRESHOLD:
+            _last_wiki_access = current_wiki_access
+            print("Getting a wikipedia article...")
+            random_article_res = requests.get("https://en.wikipedia.org/wiki/Special:Random")
 
-        if random_article_res.status_code != 200:
-            print(f"Bad request: response: {random_article_res.status_code}")
-            return ""
+            if random_article_res.status_code != 200:
+                print(f"Bad request: response: {random_article_res.status_code}")
+                return ""
+
+            random_article_text = random_article_res.text
         else:
-            soup = BeautifulSoup(random_article_res.text, "html.parser")
-            #print([p.get_text() for p in soup.find(id="bodyContent").find_all("p")])
-            exclude = set(["article", "stub", "help", "wikipedia", "expanding",])
+            # use last random article text
+            _last_wiki_access = last_wiki_access
+            print("Using last wikipedia article...")
 
-            vocab = [
-                word
-                for paragraph in soup.find(id="bodyContent").find_all("p")
-                for word in simple_tokenize(paragraph.get_text())
-                if word not in exclude
-            ]
+        soup = BeautifulSoup(random_article_text, "html.parser")
+        #print([p.get_text() for p in soup.find(id="bodyContent").find_all("p")])
+        exclude = set(["article", "stub", "help", "wikipedia", "expanding",])
 
-            vocab = list(set(vocab))
+        vocab = [
+            word
+            for paragraph in soup.find(id="bodyContent").find_all("p")
+            for word in simple_tokenize(paragraph.get_text())
+            if word not in exclude
+        ]
 
-            if len(vocab) < num_words:
-                print(f"Article of length {len(vocab)} is less than minimum length {num_words}, continuing")
-                continue
+        vocab = list(set(vocab))
 
-            symbol = random.choice("!@#$%^&*()+=")
-            random_words = []
-            while len(random_words) < num_words:
-                random_word = random.choice(vocab)
-                if random_word not in random_words:
-                    random_words.append(random_word)
+        if len(vocab) < num_words:
+            print(f"Article of length {len(vocab)} is less than minimum length {num_words}, continuing")
+            time.sleep(1.0)
+            continue
 
-            pw = symbol.join(random_words)
+        symbol = random.choice("!@#$%^&*()+=")
+        random_words = []
+        while len(random_words) < num_words:
+            random_word = random.choice(vocab)
+            if random_word not in random_words:
+                random_words.append(random_word)
 
-            return pw
+        pw = symbol.join(random_words)
+
+        last_wiki_access = _last_wiki_access
+
+        print("Got password")
+
+        return pw
 
 
 if __name__ == "__main__":

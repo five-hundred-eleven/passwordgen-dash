@@ -205,7 +205,7 @@ def updateGeneratedPassphrase(num_words, *args):
     #print(f"Number of letters selected: {num_letters}")
 
     indicator_text = f"""
-        Select length with the slider: {num_words}
+        Select number of words with the slider: {num_words}
     """
     current_generated_password = generatePassphrase(int(num_words))
     return (
