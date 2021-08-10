@@ -21,21 +21,21 @@ a {
     z-index: 999;
 }
 
-#generate-another {
+#generate-another, #generate-another2 {
     margin-bottom: 15px;
 }
 
-#generated-password {
+#generated-password, #generated-passphrase {
     font-family: monospace;
     margin-left: 3px;
 }
 
-#confirm-password {
+#confirm-password, #confirm-passphrase {
     width: 100%;
     font-family: monospace;
 }
 
-#confirm-password-indicator {
+#confirm-password-indicator, #confirm-passphrase-indicator {
     min-height: 35px;
 }
 

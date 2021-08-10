@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 
+from bs4 import BeautifulSoup
 import random
+import re
+import requests
+import spacy
+
+nlp = spacy.load("en_core_web_sm")
 
 left_keys =         "qwertasdfgzxcv2345"
 left_shift_keys =   "QWERTASDFGZXCV!@#$%"
@@ -44,6 +50,61 @@ def generatePassword(num_letters):
 
     return res
 
-if __name__ == "__main__":
+def simple_tokenize(doc):
+    """
+        Takes a document and returns a list of tokens (simplified lowercase words).
+        This version of the method assumes the doc is already relatively clean
+        and will not handle html tags or extraneous characters.
+        @type doc: str
+        @rtype: List[str]
+    """
+    return [
+        re.sub(r"[^a-z0-9]", "", t.lemma_.lower()).strip() for t in nlp(doc)
+        if not t.is_stop and not t.is_punct and t.text.strip()
+    ]
 
+def generatePassphrase(num_words):
+
+    #print(f"generating a passphrase with {num_words} words")
+
+    # will loop if we get a very short article
+    while True:
+
+        print("Getting a wikipedia article...")
+        random_article_res = requests.get("https://en.wikipedia.org/wiki/Special:Random")
+
+        if random_article_res.status_code != 200:
+            print(f"Bad request: response: {random_article_res.status_code}")
+            return ""
+        else:
+            soup = BeautifulSoup(random_article_res.text, "html.parser")
+            #print([p.get_text() for p in soup.find(id="bodyContent").find_all("p")])
+            exclude = set(["article", "stub", "help", "wikipedia", "expanding",])
+
+            vocab = [
+                word
+                for paragraph in soup.find(id="bodyContent").find_all("p")
+                for word in simple_tokenize(paragraph.get_text())
+                if word not in exclude
+            ]
+
+            vocab = list(set(vocab))
+
+            if len(vocab) < num_words:
+                print(f"Article of length {len(vocab)} is less than minimum length {num_words}, continuing")
+                continue
+
+            symbol = random.choice("!@#$%^&*()+=")
+            random_words = []
+            while len(random_words) < num_words:
+                random_word = random.choice(vocab)
+                if random_word not in random_words:
+                    random_words.append(random_word)
+
+            pw = symbol.join(random_words)
+
+            return pw
+
+
+if __name__ == "__main__":
     print(generatePassword(15))
