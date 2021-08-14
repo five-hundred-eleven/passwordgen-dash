@@ -45,7 +45,7 @@ layout = html.Div([
                     dcc.Markdown("""
                         ### Warning
 
-                        Security was not taken into consideration in this app so I
+                        This app has not been analyzed by security professionals so I
                         do not advise using it for sensitive purposes. If you like
                         it, clone it and run the server on a trusted local machine. See
                         [the source](https://github.com/ekoly/passwordgen-dash).
@@ -72,7 +72,7 @@ layout = html.Div([
                     ),
                     html.Div([], id="confirm-password-indicator"),
                     dcc.Markdown("""
-                        ### What does "easy to type" and "easy to read" mean?
+                        ### What do "easy to type" and "easy to read" mean?
 
                         "Easy to type" means:
                         * Alternating between keys typed by the left hand and right hand
@@ -88,9 +88,8 @@ layout = html.Div([
 
                         This will grab a random wikipedia article and select random words from the
                         article, seperated by a random special character, to use as a passphrase.
-                        **The resulting password may contain offensive or NSFW words.** Some security
-                        experts [believe that passphrases are harder to guess and easier to
-                        remember than passwords](https://protonmail.com/blog/protonmail-com-blog-password-vs-passphrase/).
+                        Some security experts [believe that passphrases are harder to guess and
+                        easier to remember than passwords](https://protonmail.com/blog/protonmail-com-blog-password-vs-passphrase/).
                     """),
                     html.Div([], id="length-indicator2"),
                     dcc.Slider(

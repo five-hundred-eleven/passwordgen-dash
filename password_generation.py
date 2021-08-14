@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from bs4 import BeautifulSoup
+from profanity_filter import ProfanityFilter
 import random
 import re
 import requests
@@ -8,11 +9,15 @@ import spacy
 import time
 
 try:
-    nlp = spacy.load("en_core_web_sm")
+    nlp = spacy.load("en")
 except:
     import os
-    os.system("python -m spacy download en_core_web_sm")
-    nlp = spacy.load("en_core_web_sm")
+    os.system("python -m spacy download en")
+    nlp = spacy.load("en")
+
+profanity_filter = ProfanityFilter(nlps={"en": nlp})
+nlp.add_pipe(profanity_filter.spacy_component, last=True)
+nlp.Defaults.stop_words |= set(["article", "stub", "help", "wikipedia", "expanding",])
 
 LOAD_WIKI_THRESHOLD = 15.0
 random_article_text = ""
@@ -70,7 +75,10 @@ def simple_tokenize(doc):
     """
     return [
         re.sub(r"[^a-z0-9]", "", t.lemma_.lower()).strip() for t in nlp(doc)
-        if not t.is_stop and not t.is_punct and t.text.strip()
+        if (t.text.strip() and
+            not t.is_stop and
+            not t.is_punct and
+            not t._.is_profane)
     ]
 
 def generatePassphrase(num_words):
@@ -99,13 +107,12 @@ def generatePassphrase(num_words):
 
         soup = BeautifulSoup(random_article_text, "html.parser")
         #print([p.get_text() for p in soup.find(id="bodyContent").find_all("p")])
-        exclude = set(["article", "stub", "help", "wikipedia", "expanding",])
 
         vocab = [
             word
             for paragraph in soup.find(id="bodyContent").find_all("p")
             for word in simple_tokenize(paragraph.get_text())
-            if word not in exclude
+            if len(word) > 2
         ]
 
         vocab = list(set(vocab))
