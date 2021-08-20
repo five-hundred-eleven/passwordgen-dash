@@ -8,12 +8,17 @@ import requests
 import spacy
 import time
 
-try:
-    nlp = spacy.load("en_core_web_sm")
-except:
-    import os
-    os.system("python -m spacy download en_core_web_sm")
-    nlp = spacy.load("en_core_web_sm")
+while True:
+    try:
+        nlp = spacy.load("en_core_web_sm")
+        break
+    except:
+        import os
+        os.system("python -m spacy download en_core_web_sm")
+        time.sleep(5.)
+        continue
+
+print("Got past imports...")
 
 profanity_filter = ProfanityFilter(nlps={"en": nlp})
 nlp.add_pipe(profanity_filter.spacy_component, last=True)
