@@ -1,10 +1,25 @@
-import os
+from dash import Dash
+import dash_bootstrap_components as dbc
 from flask import Flask, send_from_directory
+import os
 
+server = Flask(__name__)
 
-FLASK_APP = Flask(__name__)
+external_stylesheets = [
+    dbc.themes.BOOTSTRAP,
+    "/css/main.css",
+]
 
-@FLASK_APP.route("/js/<filename>")
+meta_tags = [
+    {
+        "name": "viewport",
+        "content": "width=device-width, initial-scale=1",
+    }
+]
+
+app = Dash(__name__, server=server, meta_tags=meta_tags, external_stylesheets=external_stylesheets)
+
+@server.route("/js/<filename>")
 def static_js(filename):
     """
         Serves javascript files.
@@ -12,7 +27,7 @@ def static_js(filename):
     path = os.path.join(os.getcwd(), "js")
     return send_from_directory(path, filename)
 
-@FLASK_APP.route("/css/<filename>")
+@server.route("/css/<filename>")
 def static_css(filename):
     """
         Serves css files.
@@ -20,7 +35,7 @@ def static_css(filename):
     path = os.path.join(os.getcwd(), "css")
     return send_from_directory(path, filename)
 
-@FLASK_APP.route("/img/<filename>")
+@server.route("/img/<filename>")
 def static_img(filename):
     """
         Serves image files.
