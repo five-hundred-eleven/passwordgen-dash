@@ -1,9 +1,9 @@
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
-from password_generation import generatePassphrase
 
 from flask_app import app
+from password_generation import generatePassphrase
 
 
 DEFAULT_PASSPHRASE_LENGTH = 5
